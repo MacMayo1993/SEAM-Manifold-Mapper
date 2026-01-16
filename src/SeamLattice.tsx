@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { RotateCcw, Zap, Move3D } from 'lucide-react';
+import { RotateCcw, Zap } from 'lucide-react';
 import {
   createGrid,
   getNeighbors,
@@ -144,11 +144,15 @@ const SeamLattice: React.FC = () => {
 
   // Animation Loop
   useEffect(() => {
-    let intervalId: NodeJS.Timeout | number;
+    let intervalId: ReturnType<typeof setInterval> | undefined;
     if (isRunning && !annihilated) {
       intervalId = setInterval(stepSimulation, config.delay);
     }
-    return () => clearInterval(intervalId);
+    return () => {
+      if (intervalId !== undefined) {
+        clearInterval(intervalId);
+      }
+    };
   }, [isRunning, annihilated, config.delay, stepSimulation]);
 
 
